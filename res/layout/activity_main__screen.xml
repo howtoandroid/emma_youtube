@@ -20,7 +20,7 @@
         android:onClick="process_Search" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/searchBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/button1"

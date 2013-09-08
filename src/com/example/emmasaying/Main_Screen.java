@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
@@ -72,14 +74,68 @@ public class Main_Screen extends Activity implements OnSharedPreferenceChangeLis
 	  
 	  public void process_Search(View view)
 	  {
-		  youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() 
-		  {
-			  public void initialize(HttpRequest request) throws IOException {}
-	      }
-		  ).setApplicationName("emaa-saying").build();
-      String queryTerm;
-      startActivity(new Intent(this, Results_Activity.class));
+		  try {
+			  youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
+				  public void initialize(HttpRequest request) throws IOException {}
+		      }).setApplicationName("emaa-saying").build();
+			  
+			  EditText SearchBox = (EditText)findViewById(R.id.searchBox);
+			  String Query = SearchBox.getText().toString();
+			  	Log.d("status", "Contents: " + Query); //// adb logcat -s "TAGNAME"
+			  	
+		      YouTube.Search.List search = youtube.search().list("id,snippet");
+			  search.setKey(DEVELOPER_KEY);
+			  search.setQ(Query);
+			  search.setType("video");
+		      search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+		      search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+		      SearchListResponse searchResponse = search.execute();
+	
+		      List<SearchResult> searchResultList = searchResponse.getItems();
+
+		      if (searchResultList != null) {
+		        prettyPrint(searchResultList.iterator(), Query);
+		      }
+		      
+			  startActivity(new Intent(this, Results_Activity.class));
+		  } catch (GoogleJsonResponseException e) {
+			  System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
+					  + e.getDetails().getMessage());
+		  } catch (IOException e) {
+			  System.err.println("There was an IO error: " + e.getCause() + " : " + e.getMessage());
+		  } catch (Throwable t) {
+			  t.printStackTrace();
+		  }
 	  }
-
-
+	  
+	  private static void prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) 
+	  {
+		System.out.println("\n=============================================================");
+		System.out.println(
+		    "   First " + NUMBER_OF_VIDEOS_RETURNED + " videos for search on \"" + query + "\".");
+		System.out.println("=============================================================\n");
+		
+		if (!iteratorSearchResults.hasNext()) 
+		{
+		  System.out.println(" There aren't any results for your query.");
+		}
+		
+		while (iteratorSearchResults.hasNext()) 
+		{
+		
+		  SearchResult singleVideo = iteratorSearchResults.next();
+		  ResourceId rId = singleVideo.getId();
+		
+		  // Double checks the kind is video.
+		  if (rId.getKind().equals("youtube#video")) 
+		  {
+		    Thumbnail thumbnail = (Thumbnail) singleVideo.getSnippet().getThumbnails().get("default");
+		
+		    System.out.println(" Video Id" + rId.getVideoId());
+		    System.out.println(" Title: " + singleVideo.getSnippet().getTitle());
+		    System.out.println(" Thumbnail: " + thumbnail.getUrl());
+		    System.out.println("\n-------------------------------------------------------------\n");
+		  }
+		}
+	  }
 }
