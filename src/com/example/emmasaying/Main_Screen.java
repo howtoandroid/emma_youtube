@@ -82,19 +82,24 @@ public class Main_Screen extends Activity implements OnSharedPreferenceChangeLis
 			  EditText SearchBox = (EditText)findViewById(R.id.searchBox);
 			  String Query = SearchBox.getText().toString();
 			  	Log.d("status", "Contents: " + Query); //// adb logcat -s "TAGNAME"
-			  	
+		
+			  // Sets the "part" parameters.
 		      YouTube.Search.List search = youtube.search().list("id,snippet");
+		      // Sets the remaining parameters.
 			  search.setKey(DEVELOPER_KEY);
 			  search.setQ(Query);
 			  search.setType("video");
 		      search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
 		      search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+		      search.setChannelId("UCNE227nPPd04KCtOK7_T7UQ");
+		      search.setOrder("relevance");
+		      
 		      SearchListResponse searchResponse = search.execute();
 	
 		      List<SearchResult> searchResultList = searchResponse.getItems();
 
 		      if (searchResultList != null) {
-		        prettyPrint(searchResultList.iterator(), Query);
+		        resultsLog(searchResultList.iterator(), Query);
 		      }
 		      
 			  startActivity(new Intent(this, Results_Activity.class));
@@ -108,16 +113,16 @@ public class Main_Screen extends Activity implements OnSharedPreferenceChangeLis
 		  }
 	  }
 	  
-	  private static void prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) 
+	  private static void resultsLog(Iterator<SearchResult> iteratorSearchResults, String query) 
 	  {
-		System.out.println("\n=============================================================");
-		System.out.println(
+		Log.d("status", "\n=============================================================");
+		Log.d("status",
 		    "   First " + NUMBER_OF_VIDEOS_RETURNED + " videos for search on \"" + query + "\".");
-		System.out.println("=============================================================\n");
+		Log.d("status", "=============================================================\n");
 		
 		if (!iteratorSearchResults.hasNext()) 
 		{
-		  System.out.println(" There aren't any results for your query.");
+		  Log.d("status", "There aren't any results for your query.");
 		}
 		
 		while (iteratorSearchResults.hasNext()) 
@@ -131,10 +136,10 @@ public class Main_Screen extends Activity implements OnSharedPreferenceChangeLis
 		  {
 		    Thumbnail thumbnail = (Thumbnail) singleVideo.getSnippet().getThumbnails().get("default");
 		
-		    System.out.println(" Video Id" + rId.getVideoId());
-		    System.out.println(" Title: " + singleVideo.getSnippet().getTitle());
-		    System.out.println(" Thumbnail: " + thumbnail.getUrl());
-		    System.out.println("\n-------------------------------------------------------------\n");
+		    Log.d("status"," Video Id" + rId.getVideoId());
+		    Log.d("status"," Title: " + singleVideo.getSnippet().getTitle());
+		    Log.d("status"," Thumbnail: " + thumbnail.getUrl());
+		    Log.d("status","\n-------------------------------------------------------------\n");
 		  }
 		}
 	  }
