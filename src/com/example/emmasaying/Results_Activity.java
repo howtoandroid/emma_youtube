@@ -23,6 +23,8 @@ public class Results_Activity extends Activity {
 
 	public void launchPlayer(View view) 
 	{
-		startActivity(new Intent(this, Player_Activity.class));
+		Intent ytPlayerIntent= new Intent(this, Player_Activity.class);
+		ytPlayerIntent.putExtra("VIDEO_ID", "mYeEy5Xhx4A");
+		startActivity(ytPlayerIntent);
 	}
 }
