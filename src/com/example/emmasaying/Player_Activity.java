@@ -46,9 +46,9 @@ YouTubePlayer.OnInitializedListener {
 	public void onInitializationSuccess(Provider p, YouTubePlayer ytPlayer,
 			boolean wasRestored) 
 	{
-		 if (!wasRestored) {
+		 if (!wasRestored) 
+		 {
 		        ytPlayer.cueVideo(VIDEO_ID);
-		      }		
+		 }		
 	}
-	
 }
