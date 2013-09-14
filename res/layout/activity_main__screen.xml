@@ -8,24 +8,43 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Main_Screen" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="31dp"
-        android:text="Search"
-        android:onClick="process_Search" />
-
     <EditText
         android:id="@+id/searchBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_toLeftOf="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:ems="10"
         android:text="Enter query" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/searchBox"
+        android:layout_alignBottom="@+id/searchBox"
+        android:layout_alignParentRight="true"
+        android:onClick="process_Search"
+        android:text="Search" />
+
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/mainscreen_youtubeplayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="89dp" >
+    </com.google.android.youtube.player.YouTubePlayerView>
+
+    <TextView
+        android:id="@+id/latest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:text="Latest Upload"
+        android:textAppearance="?android:attr/textAppearanceLarge"  />
+
 
 </RelativeLayout>

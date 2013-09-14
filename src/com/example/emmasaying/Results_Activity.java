@@ -64,19 +64,19 @@ public class Results_Activity extends Activity {
 	}
 	
 	/** Global instance properties filename. */
-	  private static String PROPERTIES_FILENAME = "youtube.properties";
+	  public static String PROPERTIES_FILENAME = "youtube.properties";
 
 	  /** Global instance of the HTTP transport. */
-	  private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+	  public static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 
 	  /** Global instance of the JSON factory. */
-	  private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+	  public static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
 	  /** Global instance of the max number of videos we want returned (50 = upper limit per page). */
-	  private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
+	  public static final long NUMBER_OF_VIDEOS_RETURNED = 25;
 
 	  /** Global instance of Youtube object to make all API requests. */
-	  private static YouTube youtube;
+	  public static YouTube youtube;
 	  
 	  public static final String DEVELOPER_KEY = "AIzaSyBlZu96jbKmUcdOFoWt7x6fBk1fgVBQcTY";
 	  
@@ -85,7 +85,7 @@ public class Results_Activity extends Activity {
 		 try {
 			  youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
 				  public void initialize(HttpRequest request) throws IOException {}
-		      }).setApplicationName("emaa-saying").build();
+		      }).setApplicationName("emma-saying").build();
 		
 			  // Sets the "part" parameters.
 		      YouTube.Search.List search = youtube.search().list("id,snippet");
@@ -112,11 +112,12 @@ public class Results_Activity extends Activity {
 
 
 		  } catch (GoogleJsonResponseException e) {
-			  System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
-					  + e.getDetails().getMessage());
+			  Log.d("status", "There was a service error: " + e.getDetails().getCode() + " : "
+						+ e.getDetails().getMessage());
 		  } catch (IOException e) {
-			  System.err.println("There was an IO error: " + e.getCause() + " : " + e.getMessage());
+			  Log.d("status", "There was an IO error: " + e.getCause() + " : " + e.getMessage());
 		  } catch (Throwable t) {
+			  Log.d("status", "Throwable Error");
 			  t.printStackTrace();
 		  }
 	}
