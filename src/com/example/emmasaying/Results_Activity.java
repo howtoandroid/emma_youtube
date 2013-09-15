@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -53,6 +55,9 @@ public class Results_Activity extends Activity implements OnItemClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_results_);
 		
 		// Get query from Main Screen search box
@@ -70,25 +75,7 @@ public class Results_Activity extends Activity implements OnItemClickListener {
 		if (searchResultList != null) {
 			resultsLog(searchResultList.iterator(), Query);
 		}
-		
-		/* while (searchResultList.iterator().hasNext()) 
-		{
-			SearchResult singleVideo = searchResultList.iterator().next();
-			ResourceId rId = singleVideo.getId();
-			Log.d("status", rId.getVideoId());
-		}
-		*/
-
-		/*ListView resultsList = (ListView)findViewById(R.id.resultsList);
-	    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getBaseContext(), R.layout.listitem, acNames.get(0));
-	    resultsList.setAdapter(adapter1);
-	    results = getIntent().getStringArrayListExtra("results);
-	    List<String> firstColumn = new ArrayList<String>();
-	    for (List<String> row : acNames) {
-	        firstColumn.add(row.get(0));
-	    }
-	    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getBaseContext(), R.layout.listitem, firstColumn);
-		 */
+		// Language = Locale.getDefault().getLanguage();
 	}
 
 	public List<SearchResult> populateResults(String query)
@@ -106,7 +93,7 @@ public class Results_Activity extends Activity implements OnItemClickListener {
 			search.setKey(DEVELOPER_KEY);
 			search.setQ(query);
 			search.setType("video");
-			search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+			search.setFields("items(id/kind,id/videoId,snippet/description,snippet/title,snippet/thumbnails/default/url)");
 			search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 			search.setChannelId("UCNE227nPPd04KCtOK7_T7UQ");
 			search.setOrder("relevance");
@@ -160,11 +147,12 @@ public class Results_Activity extends Activity implements OnItemClickListener {
 		}
 	}
 	
-	public void onListItemClick(ListView parent, View v,
+	/* public void onListItemClick(ListView parent, View v,
 			int position, long id) {
 		Log.d("status", "OnListItemClick fired.");
 		launchResult(searchResultList.get(position).getId().getVideoId());
 			}
+			*/
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,33 +161,23 @@ public class Results_Activity extends Activity implements OnItemClickListener {
 		return true;
 	}
 
-	public void launchResult(String videoID)
+	public void launchResult(String videoID, String desc, String title)
 	{
 		Log.d("status", "launchResults fired with ID " + videoID);
 		Intent ytPlayerIntent= new Intent(this, Player_Activity.class);
 		ytPlayerIntent.putExtra("VIDEO_ID", videoID);
-		startActivity(ytPlayerIntent);
-	}
-	public void launchPlayer(View view) 
-	{
-		Log.d("status", "launchPlayer fired.");
-		//ListView w = (ListView) view;
-		Intent ytPlayerIntent= new Intent(this, Player_Activity.class);
-		
-		ytPlayerIntent.putExtra("VIDEO_ID", "mYeEy5Xhx4A");
+		ytPlayerIntent.putExtra("description", desc);
+		ytPlayerIntent.putExtra("title", title);
 		startActivity(ytPlayerIntent);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		// TODO Auto-generated method stub
-		  Log.d("status", "OnItemClick from ResultsActivity fired at position " + position);
 		SearchResult singleVideo = searchResultList.get(position);
-		  Log.d("status","Result obtained");
 		ResourceId singleVideoId = singleVideo.getId();
-		  Log.d("status","Resource ID obtained");
 		String vidID = singleVideoId.getVideoId();
-		  Log.d("status", "Video ID: " + vidID);
-		launchResult(vidID);
+
+		launchResult(vidID, singleVideo.getSnippet().getDescription(), singleVideo.getSnippet().getTitle());
 	}
 }
