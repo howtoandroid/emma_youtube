@@ -28,8 +28,8 @@ public final class R {
         public static final int button1=0x7f080001;
         public static final int icon=0x7f080007;
         public static final int latest=0x7f080003;
+        public static final int list=0x7f080006;
         public static final int mainscreen_youtubeplayer=0x7f080002;
-        public static final int resultsList=0x7f080006;
         public static final int searchBox=0x7f080000;
         public static final int secondLine=0x7f080008;
         public static final int textView1=0x7f080004;

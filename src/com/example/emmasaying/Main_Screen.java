@@ -75,14 +75,14 @@ YouTubePlayer.OnInitializedListener {
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
 		// TODO Auto-generated method stub
-		
+		// TODO Need to deal with menus
 	}
 	  
 	public void process_Search(View view)
 	{
 		EditText SearchBox = (EditText)findViewById(R.id.searchBox);
 		String Query = SearchBox.getText().toString();
-		  Log.d("status", "Contents: " + Query); // adb logcat -s "TAGNAME"
+		  Log.d("status", "Contents: " + Query); 							// adb logcat -s "TAGNAME"
 		Intent resultsIntent = new Intent(this, Results_Activity.class);
 		resultsIntent.putExtra("query", Query);
 		startActivity(resultsIntent);
@@ -107,7 +107,7 @@ YouTubePlayer.OnInitializedListener {
 
 	/* 
 	 * Returns the ID of the user's latest upload.
-	 * #TODO - Should be refactored into superclass
+	 * #TODO - Should be refactored into superclass.
 	 */
 	public String getLatestUpload()
 	{
